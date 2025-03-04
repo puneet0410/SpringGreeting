@@ -1,24 +1,31 @@
 package com.example.SpringDevelopmentProject.SpringDevelopment.controllers;
 
-import com.example.SpringDevelopmentProject.SpringDevelopment.dto.GreetingMessage;
+import com.example.SpringDevelopmentProject.SpringDevelopment.dto.GreetingDTO;
 import com.example.SpringDevelopmentProject.SpringDevelopment.services.GreetingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
 @RestController
-@RequestMapping("/hello")
+@RequestMapping("/greetings")
 public class HelloController {
-    private final GreetingService greetingService;
-    public HelloController(GreetingService greetingService){
-        this.greetingService=greetingService;
+
+    @Autowired
+    private GreetingService greetingService;
+
+    @GetMapping
+    public List<GreetingDTO> getAllGreetings() {
+        return greetingService.getAllGreetings();
     }
-//    @GetMapping
-//    public GreetingMessage getGreeting(){
-//        return new GreetingMessage("Hello welcome to SpringBoot");
-//    }
-//
-    @GetMapping("/greet")
-    public String getGreeting(
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName) {
-        return greetingService.getGreetingMessage(firstName, lastName);
+
+    @PostMapping
+    public GreetingDTO createGreeting(@RequestBody GreetingDTO greetingDTO) {
+        return greetingService.createGreeting(greetingDTO);
+    }
+
+    @GetMapping("/hello")
+    public String sayHello() {
+        return "Hello, World!";
     }
 }
+
